@@ -1,10 +1,11 @@
 /**
  * @description retorna un html con el card a iterar
- * @param {String} titulo
- * @param {String} rankIMDB
- * @param {String} calificacion
- * @param {Array} genero
- * @param {String} descripcion
+ * @param {String} title
+ * @param {String} poster_path
+ * @param {String} vote_average
+ * @param {String} genre_ids
+ * @param {Array} release_date
+ * @param {String} overview
  * @return HTMLDivElement
  */
 export default function card(title,poster_path, vote_average, genre_ids, release_date, overview)
@@ -38,7 +39,7 @@ export default function card(title,poster_path, vote_average, genre_ids, release
                     <div class="row info-pelicula">
                         <div class="col-lg-6">
                             <label for="genero"> <strong>Género: </strong>
-                                <span id="genero" class="badge-success rounded small"> Accion </span></label>
+                                <span id="genero" class="badge-success rounded small"> ${genre_ids} </span></label>
                         </div>
                         <div class="col-lg-6">
                             <label for="fecha"> <strong>Fecha Lanzamiento: </strong>

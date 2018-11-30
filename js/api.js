@@ -6,7 +6,9 @@ export default class Api {
     constructor(consulta = []) {
         this.consulta = consulta;
         this.urlConsulta = 'https://api.themoviedb.org/3/';
+        this.urlGeneros = 'https://api.themoviedb.org/3/genre/';
         this.apiKey = `e237402b86941fee4a4fbc87710062ff`;
+        this.language = 'es-CO';
         this.init();
     }
 
@@ -19,7 +21,8 @@ export default class Api {
         switch (tipoConsulta) {
             case 'top_rated':
                 let {language, page, factorOrdenamiento, tipo} = this.consulta;
-                this.urlConsulta += `${tipo}/${factorOrdenamiento}?&api_key=${this.apiKey}&language=${language}&page=${page}`;
+                this.language = language;
+                this.urlConsulta += `${tipo}/${factorOrdenamiento}?&api_key=${this.apiKey}&language=${this.language}&page=${page}`;
                 this.realizarConsulta();
                 break;
         }
@@ -39,7 +42,20 @@ export default class Api {
             factorOrdenamiento: this.consulta.factorOrdenamiento
 
         };
-
     }
+
+    async obtenerGeneros(genre_ids) {
+        //Fetch a la API
+        const requestApi = await fetch
+        (this.urlGeneros + `${this.consulta.tipo}/list?&api_key=${this.apiKey}&language=${this.language}`);
+
+        //Recuperando generos en formato JSON
+        const listaGeneros = await requestApi.json();
+
+        return {
+            listaGeneros: listaGeneros
+        };
+    }
+
 }
 
