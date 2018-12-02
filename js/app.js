@@ -7,12 +7,11 @@ document.addEventListener('DOMContentLoaded', () =>{
         tipo: 'movie',
         factorOrdenamiento: 'top_rated',
         language: 'es-CO',
-        page: 2
+        page: 1
     };
 
     const interfaz = new UI(consulta);
-    interfaz.renderizar();
-    interfaz.obtenerListaGeneros();
+
 });
 
 

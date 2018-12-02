@@ -11,49 +11,30 @@ export default class UI {
     }
 
     init() {
-        this.renderizar();
         this.obtenerListaGeneros();
+        this.renderizar();
     }
 
     renderizar() {
         this.api.realizarConsulta()
             .then(res => res.resultado.results)
-            .then(res =>
+            .then(res => {
                 res.map(contenido => {
-                    let generos = [];
+
                     switch (this.consulta.tipo) {
                         case 'tv':
                             var {name, vote_average, popularity, poster_path, overview, first_air_date, genre_ids} = contenido;
-
-                            genre_ids.map(genero_id => {
-                                this.arregloGeneros.filter((genero, index) => {
-                                    if (genero[index].id === genero_id) {
-                                        generos.push(genero[index].name);
-                                    }
-                                });
-                            });
-                            this.resultadosHTML.innerHTML += card(name, poster_path, vote_average, generos, first_air_date, overview);
+                            genre_ids = this.obtenerGenerosMovieOrTV(genre_ids);
+                            this.resultadosHTML.innerHTML += card(name, poster_path, vote_average, genre_ids, first_air_date, overview);
                             break;
-                        case
-                        'movie':
+                        case 'movie':
                             var {title, vote_average, popularity, poster_path, overview, release_date, genre_ids} = contenido;
-
-                            genre_ids.map(genero_id => {
-                                this.arregloGeneros.filter((genero, index) => {
-                                    if (genero[index].id === genero_id) {
-                                        generos.push(genero[index].name);
-                                    }
-                                });
-                            });
-
-                            this.resultadosHTML.innerHTML += card(title, poster_path, vote_average, generos, release_date, overview);
+                            genre_ids = this.obtenerGenerosMovieOrTV(genre_ids);
+                            this.resultadosHTML.innerHTML += card(title, poster_path, vote_average, genre_ids, release_date, overview);
                             break;
                     }
                 })
-            ).catch(error => console.log(error));
-
-        console.log(this.arregloGeneros)
-
+            }).catch(error => console.log(error));
     }
 
     obtenerListaGeneros() {
@@ -64,5 +45,16 @@ export default class UI {
             }).catch(error => console.log(error));
     }
 
+    obtenerGenerosMovieOrTV(genre_ids) {
+        let generos = [];
+        this.arregloGeneros[0].map(genero => {
+            genre_ids.filter(genero_id => {
+                if (genero_id === genero.id) {
+                    generos.push(genero.name)
+                }
+            });
+        });
+        return generos;
+    }
 }
 
