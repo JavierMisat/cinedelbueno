@@ -29,7 +29,6 @@ export default function card(title,poster_path, vote_average, genre_ids, release
                             <label for="calificacion">
                                 <span id="calificacion" class="float-sm-right badge-wa rounded">
                                     ${Array(Math.round(vote_average)).join(0).split(0).map((item, i) =>{
-                                        console.log(item);
                                         return `<li class="oi oi-star text-warning" aria-hidden="true"></li>`;
                                     }).join('')}
                                 </span></label>

@@ -4,71 +4,65 @@ import card from './card.js';
 export default class UI {
     constructor(consulta) {
         this.consulta = consulta;
-        this.resultadosApi = new Api(consulta);
+        this.api = new Api(consulta);
+        this.arregloGeneros = [];
         this.resultadosHTML = document.querySelector('#resultados');
         this.init();
     }
 
     init() {
-        this.obtenerResultados();
-    }
-
-    obtenerResultados() {
-        return this.resultadosApi.realizarConsulta()
-            .then(res => res.resultado.results)
-            .catch(error => console.log(error));
-
+        this.renderizar();
+        this.obtenerListaGeneros();
     }
 
     renderizar() {
-        const resultados = this.obtenerResultados();
-        resultados.then(res => {
-            let generoActuales = [];
-            res.map(contenido => {
-                switch (this.consulta.tipo) {
-                    case 'tv':
-                        var {name, vote_average, popularity, poster_path, overview, first_air_date, genre_ids} = contenido;
-                        generoActuales =  this.obtenerListaGeneros(genre_ids);
-                        generoActuales.forEach(e => console.log(e))
+        this.api.realizarConsulta()
+            .then(res => res.resultado.results)
+            .then(res =>
+                res.map(contenido => {
+                    let generos = [];
+                    switch (this.consulta.tipo) {
+                        case 'tv':
+                            var {name, vote_average, popularity, poster_path, overview, first_air_date, genre_ids} = contenido;
 
+                            genre_ids.map(genero_id => {
+                                this.arregloGeneros.filter((genero, index) => {
+                                    if (genero[index].id === genero_id) {
+                                        generos.push(genero[index].name);
+                                    }
+                                });
+                            });
+                            this.resultadosHTML.innerHTML += card(name, poster_path, vote_average, generos, first_air_date, overview);
+                            break;
+                        case
+                        'movie':
+                            var {title, vote_average, popularity, poster_path, overview, release_date, genre_ids} = contenido;
 
-                        this.resultadosHTML.innerHTML += card(name, poster_path, vote_average, genre_ids, first_air_date, overview);
-                        break;
-                    case 'movie':
-                        var {title, vote_average, popularity, poster_path, overview, release_date, genre_ids} = contenido;
-                        genre_ids = this.obtenerListaGeneros(genre_ids);
-                        this.resultadosHTML.innerHTML += card(title, poster_path, vote_average, genre_ids, release_date, overview);
-                        break;
-                }
-            })
+                            genre_ids.map(genero_id => {
+                                this.arregloGeneros.filter((genero, index) => {
+                                    if (genero[index].id === genero_id) {
+                                        generos.push(genero[index].name);
+                                    }
+                                });
+                            });
 
-        }).catch(error => console.log(error));
-    }
-
-    obtenerListaGeneros(genre_ids) {
-        let listaGeneros = [];
-
-        genre_ids.map(genre_id => {
-            let nombre =  this.obtenerNombreGenero(genre_id);
-            listaGeneros.push(nombre);
-        });
-
-        return listaGeneros;
-    }
-
-    obtenerNombreGenero(genre_id){
-        let listado = [];
-        this.resultadosApi.obtenerGeneros()
-            .then(generos => {
-                const objGeneros = generos.listaGeneros.genres;
-                objGeneros.map((genero, index) => {
-                    if(genero.id == genre_id){
-                        listado[index] = genero;
+                            this.resultadosHTML.innerHTML += card(title, poster_path, vote_average, generos, release_date, overview);
+                            break;
                     }
-                });
-            })
-            .catch(error => console.log(error));
-        return listado;
+                })
+            ).catch(error => console.log(error));
+
+        console.log(this.arregloGeneros)
+
     }
+
+    obtenerListaGeneros() {
+        this.api.obtenerGeneros()
+            .then(generos => generos.listaGeneros.genres)
+            .then(generos => {
+                this.arregloGeneros.push(generos);
+            }).catch(error => console.log(error));
+    }
+
 }
 
