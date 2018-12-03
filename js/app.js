@@ -1,5 +1,9 @@
 import UI from "./ui.js";
 
+
+UI.mostrarLoader();
+
+
 document.addEventListener('DOMContentLoaded', () => {
     let consulta = {
         tipo: 'movie',
