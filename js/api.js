@@ -30,6 +30,7 @@ export default class Api {
 
     async realizarConsulta() {
         //Fetch a la API
+
         const requestApi = await fetch
         (this.urlConsulta);
 
@@ -56,6 +57,5 @@ export default class Api {
             listaGeneros: listaGeneros
         };
     }
-
 }
 

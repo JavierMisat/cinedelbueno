@@ -1,5 +1,6 @@
 import Api from "./api.js"
 import card from './card.js';
+import loaderAnimation2 from './loader2.js';
 
 export default class UI {
     constructor(consulta) {
@@ -7,6 +8,7 @@ export default class UI {
         this.api = new Api(consulta);
         this.arregloGeneros = [];
         this.resultadosHTML = document.querySelector('#resultados');
+        this.loaderAnimation = document.querySelector('#loader');
         this.init();
     }
 
@@ -16,8 +18,13 @@ export default class UI {
     }
 
     renderizar() {
+        this.loaderAnimation.innerHTML = loaderAnimation2();
+        this.loaderAnimation.style.display = 'block';
+
         this.api.realizarConsulta()
-            .then(res => res.resultado.results)
+            .then(res => {
+               return  res.resultado.results;
+            })
             .then(res => {
                 res.map(contenido => {
 
@@ -34,7 +41,9 @@ export default class UI {
                             break;
                     }
                 })
-            }).catch(error => console.log(error));
+            })
+            .then(() => document.querySelector('#loader').style.display = 'none')
+            .catch(error => console.log(error));
     }
 
     obtenerListaGeneros() {
@@ -50,7 +59,7 @@ export default class UI {
         this.arregloGeneros[0].map(genero => {
             genre_ids.filter(genero_id => {
                 if (genero_id === genero.id) {
-                    generos.push(genero.name)
+                    generos.push(genero.name);
                 }
             });
         });
