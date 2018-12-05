@@ -10,7 +10,6 @@
  */
 export default function card(title,poster_path, vote_average, genre_ids, release_date, overview)
 {
-
      return `
             <div class="col-lg-6 portfolio-item">
             <div class="card h-100">
@@ -34,7 +33,6 @@ export default function card(title,poster_path, vote_average, genre_ids, release
                                 </span></label>
                         </div>
                     </div>
-
                     <div class="row info-pelicula">
                         <div class="col-lg-6">
                             <label for="genero"> <strong>Género: </strong>
